@@ -1,0 +1,28 @@
+{
+  "type": "spa_jquery",
+  "libiary": {
+  },
+  "externals": {
+    "lodash": {
+      "path": "node_modules/lodash/lodash.min.js",
+      "alias": "_"
+    },
+    "react":{
+      "path":"node_modules/react/dist/react-with-addons.js",
+      "alias": "React"
+    },
+    "react-dom":{
+      "path":"node_modules/react-dom/dist/react-dom.js",
+      "alias": "ReactDOM"
+    }
+  },
+  "proxy": {
+  },
+  "browser_support": {
+    "DEVELOPMENT": [ "last 2 versions" ],
+    "PRODUCTION": [ "last 2 versions" ]
+  },
+  "supportIE8": false,
+  "historyApiFallback": true,
+  "enableReactHotLoader": true
+}

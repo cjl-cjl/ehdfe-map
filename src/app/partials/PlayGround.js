@@ -1,36 +1,33 @@
-import 'codemirror/lib/codemirror.css';
-import 'codemirror/theme/material.css';
+import "codemirror/lib/codemirror.css";
+import "codemirror/theme/material.css";
 
-import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
-import { transform } from 'babel-standalone';
-import classnames from 'classnames';
-import Frame from './Frame';
-import CodeMirror from './Codemirror';
-import 'codemirror/mode/htmlmixed/htmlmixed';
-import 'codemirror/mode/xml/xml';
-import PropTypes from 'prop-types';
-import { Icon } from 'antd';
-import defaultRepl from '!html-loader!../repl/temple/index.html';
-import styles from './PlayGround.css';
+import React, { Component } from "react";
+import ReactDOM from "react-dom";
+import { transform } from "babel-standalone";
+import classnames from "classnames";
+import Frame from "./Frame";
+import CodeMirror from "./Codemirror";
+import "codemirror/mode/htmlmixed/htmlmixed";
+import "codemirror/mode/xml/xml";
+import PropTypes from "prop-types";
+import { Icon } from "antd";
+import defaultRepl from "!html-loader!../repl/temple/index.html";
+import styles from "./PlayGround.css";
 
 export default class PlayGround extends Component {
   static defaultProps = {
-    componentName: null,
-    scope: {
-      React,
-    },
-  }
+    componentName: null
+  };
   static propTypes = {
-    componentName: PropTypes.string,
-    scope: PropTypes.object,
-  }
+    componentName: PropTypes.string
+  };
 
   state = {
-    frameTemlp: '',//frame
-    repl: '',//codemirror
-    errorMsg: null,
-  }
+    wrapclass: "open",
+    frameTemlp: "", //frame
+    repl: "", //codemirror
+    errorMsg: null
+  };
 
   componentDidMount() {
     this.loadRepl();
@@ -41,30 +38,31 @@ export default class PlayGround extends Component {
     try {
       const repl = await import(`!html-loader!../repl/${componentName}/index.html`);
       this.setState({
-        repl,
-      })
+        repl
+      });
       this.executeCode(repl);
     } catch (e) {
       this.setState({
-        repl: defaultRepl,
-      })
+        repl: defaultRepl
+      });
       this.executeCode(defaultRepl);
     }
   }
 
   codeRun = () => {
-    this.setState({
-      frameTemlp: null,
-    });
-
+    // this.setState({
+    //   repl: defaultRepl
+    // });
+    // console.log(this.state.repl);
+    console.log(this.mount);
+    // React.unmountComponentAtNode(this.mount);
     this.executeCode(this.state.repl);
-  }
+  };
 
   executeCode(repl) {
-    
     this.setState({
-      frameTemlp: this.frameNode(repl),
-    })
+      frameTemlp: this.frameNode(repl)
+    });
 
     // try {
     //   if (this.state.errorMsg) {
@@ -84,56 +82,70 @@ export default class PlayGround extends Component {
     //   console.log(this.state.errorMsg);
 
     // }
-
   }
 
-  frameNode = (repl)=>{
-    repl = repl.replace('您的密钥','P5ZWCQajSPmOsuuFFqtV2vs2C9Cosy2w');
+  frameNode = repl => {
+    repl = repl.replace("您的密钥", "P5ZWCQajSPmOsuuFFqtV2vs2C9Cosy2w");
     return (
       <Frame
-        ref={node => this.frame = node}
-        initialContent = {repl}
+        ref={node => (this.frame = node)}
+        initialContent={repl}
         mountTarget={this.refs.mount}
-      >
-      </Frame>
-    )
-  }
+      />
+    );
+  };
+
+  handleClickTrgger = () => {
+    const classname = this.state.wrapclass;
+
+    this.setState({
+      wrapclass: classname == "close" ? "open" : "close"
+    });
+  };
 
   render() {
     const { repl, frameTemlp } = this.state;
     const codeMirrorProps = {
       value: repl,
-      onChange: (newCode) => {
+      onChange: newCode => {
         this.setState({
-          repl: newCode,
-        })
+          repl: newCode
+        });
       },
       options: {
-        lineWrapping:true, //是否显示scroll
+        lineWrapping: true, //是否显示scroll
         lineNumbers: false, //是否显示number
         styleActiveLine: true,
         matchBrackets: true,
-        mode:"htmlmixed",
-        viewportMargin: Infinity 
+        mode: "htmlmixed",
+        viewportMargin: Infinity
       },
       autoFocus: true
     };
+
+    console.log(this.state.wrapclass);
+
+    const codeClass = `demo-body demo-body-${this.state.wrapclass}`;
+    const iconType = this.state.wrapclass == "open" ? "left" : "right";
     return (
-      <div className={"demo-body"}>
+      <div className={codeClass}>
         <div className={"code-wrap"}>
+          <div className={"code-open"} onClick={this.handleClickTrgger}>
+            <Icon type={iconType} style={{ fontSize: 14, color: "#08c" }} />
+          </div>
           <div className={"code-area"}>
             <div className={"code-bar"}>
-              <a>文档</a>
-              {/* <a>刷新</a>
-              <a onClick={this.codeRun}>运行</a> */}
+              {/* <a>文档</a> */}
+              <a>刷新</a>
+              <a onClick={this.codeRun}>运行</a>
             </div>
             <div className={"code-con"}>
               <CodeMirror {...codeMirrorProps} />
             </div>
           </div>
         </div>
-        <div className={'code-map'} ref={node => this.mount = node}>
-        { frameTemlp }
+        <div className={"code-map"} ref={node => (this.mount = node)}>
+          {frameTemlp}
         </div>
       </div>
     );

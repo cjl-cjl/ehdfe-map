@@ -50,6 +50,12 @@ export default {
         parent: 'sub2',
       },
       {
+        name: 'polyline',
+        icon: 'polyline',
+        title: '添加折线',
+        parent: 'sub2',
+      },
+      {
         name: 'polygon',
         icon: 'polygon',
         title: '一系列点绘制多边形',

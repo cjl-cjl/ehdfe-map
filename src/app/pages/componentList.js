@@ -50,6 +50,12 @@ export default {
         parent: 'sub2',
       },
       {
+        name: 'polygon',
+        icon: 'polygon',
+        title: '一系列点绘制多边形',
+        parent: 'sub2',
+      },
+      {
         name: 'Marker2',
         icon: 'marker',
         title: '绘制行政区划',
